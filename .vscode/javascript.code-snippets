@@ -1,0 +1,68 @@
+{
+  "Print to console": {
+      "prefix": "CC",
+      "body": [
+          "console.log('$1');",
+          "$2"
+      ],
+      "description": "Log output to console"
+  },
+  "Print to console with variable": {
+    "prefix": "CCC",
+    "body": [
+        "console.log('$1',$2);",
+        "$3"
+    ],
+    "description": "Log output to console with variable"
+  },
+  "my VUE 3 Setup Template": {
+    "prefix": "VV",
+    "body": [
+        "<script setup>",
+        "",
+        "//import { ref, computed } from 'vue';",
+        "",
+        "//import { useXyStore } from '../stores/xy.js';",
+        "//const xyStore = useXyStore();",
+        "",
+        "//const r1 = ref(false);",
+        "//const c1 = computed(() => { return r1.value;});",
+        "//const f1 = (x) => { return x + r1.value;};",
+        "",
+        "</script>",
+        "",
+        "<template>",
+        "\t<div class=\"\">",
+        "\t\t...",
+        "\t</div>",
+        "</template>",
+        ""
+    ],
+    "description": "my VUE 3 Setup Template"
+  },
+  "my Pinia Setup Store Boilerplate": {
+    "scope": "javascript,typescript",
+    "prefix": ["PP", "pinia-setup"],
+    "body": [
+      "import { defineStore, acceptHMRUpdate } from 'pinia';",
+      "import { ref, computed } from 'vue';",
+      "",
+      "export const use$1${TM_FILENAME_BASE/^(.*)$/${1:/pascalcase}/}Store = defineStore('$2${TM_FILENAME_BASE}Store', () => {",
+      "$3",
+      "\tconst foo = ref(0);",
+      "",
+      "\tconst getFoo = computed(() => foo.value);",
+      "",
+      "\tconst setFoo = async () => { foo.value = 1; };",
+      "",
+      "\treturn {foo, getFoo, setFoo};",
+      "});",
+      "",
+      "if (import.meta.hot) {",
+      " import.meta.hot.accept(acceptHMRUpdate(use$1${TM_FILENAME_BASE/^(.*)$/${1:/pascalcase}/}Store, import.meta.hot));",
+      "}",
+      ""
+    ],
+    "description": "Bootstrap the code needed for a Vue.js Pinia Setup Store file"
+  }
+}

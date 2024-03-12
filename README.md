@@ -1,4 +1,4 @@
-# family-expenses-list-frontend
+# custom-typing-trainer
 
 # 
 ## Project setup
