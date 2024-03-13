@@ -11,9 +11,10 @@
     "coverage": "vitest run --coverage"
   },
   "dependencies": {
+    "@quasar/extras": "^1.16.9",
     "pinia": "^2.1.7",
     "quasar": "^2.0.0",
-    "vue": "^3.2.47",
+    "vue": "^3.3.11",
     "vue-router": "^4.2.5"
   },
   "devDependencies": {
@@ -27,11 +28,10 @@
     "eslint-plugin-vue": "^9.17.0",
     "happy-dom": "^12.9.1",
     "sass": "^1.69.4",
-    "vite": "^4.3.2",
+    "vite": "^5.0.8",
     "vite-aliases": "^0.11.3",
     "vite-plugin-eslint": "^1.8.1",
     "vite-plugin-html": "^3.2.0",
-    "vite-plugin-static-copy": "^0.17.0",
     "vitest": "^0.34.6"
   }
 }
