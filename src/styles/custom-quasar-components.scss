@@ -1,1 +1,16 @@
-  //...
+#q-notify {
+  border: solid 2rem #0c0c0c !important;
+}
+
+
+
+.filepicker-1  {
+  border: 1px solid $secondary;
+  min-width: 100%;
+  // min-height: 80px;
+
+  & .q-field__inner,
+  & .q-field__control {
+    min-height: 100% !important;
+  }
+}
