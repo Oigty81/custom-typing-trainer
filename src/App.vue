@@ -1,42 +1,16 @@
 <script setup>
+import { useUiStore } from '@/stores/ui.js';
 
-import { ref, computed, onMounted, onBeforeMount } from 'vue';
+const uiStore = useUiStore();
 
-import { useTypingContentStore  } from '@/stores/typingContent';
+uiStore.heightViewport = window.innerHeight;
 
-const  typingContentStore =  useTypingContentStore();
-
-onMounted(() => {
-  typingContentStore.loadDemoContent('demotext.txt');
-  //typingContentStore.loadDemoContent('vite.svg');
-  //typingContentStore.loadDemoContent('bintest.txt');
+addEventListener("resize", () => {
+  uiStore.heightViewport = window.innerHeight;
 });
-
-
-
 </script>
 
 <template>
-  <!-- <router-view /> -->
-  <div class="row">
-    <div class="col">
-      ... Header ...
-    </div>
-    <div class="col">
-      .. Control..
-    </div>
-    <div class="col">
-      ..{{ typingContentStore.foo }}
-    </div>
-  </div>
-  <div class="row">
-    <div class="col">
-      <span
-        v-for="(data, ix) in typingContentStore.data"
-        :key="ix"
-      >
-        {{ data.char }}
-      </span>
-    </div>
-  </div>
+  <router-view />
 </template>
+

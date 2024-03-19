@@ -1,6 +1,7 @@
 import {createRouter, createWebHashHistory, createWebHistory} from "vue-router";
 
-import MainPage from "@/pages/MainPage.vue";
+import MainView from '@/layouts/MainView.vue';
+import TrainingPage from "@/pages/TrainingPage.vue";
 
 let historyMode = undefined;
 
@@ -15,10 +16,19 @@ const router = createRouter({
     routes: [
         {
             path: "/",
-            name: "home",
-            redirect: "/home",
-            component: MainPage,
-           
+            name: "root",
+            component: MainView,
+            children: [
+              {
+                  path: "",
+                  redirect: "/home/",
+              },
+              {
+                  path: "home",
+                  name: "Training",
+                  component: TrainingPage
+              },
+          ],
         },
         {
             path: '/:pathMatch(.*)*',
