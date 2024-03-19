@@ -5,13 +5,13 @@ export const useUiStore = defineStore('uiStore', () => {
 
     const heightViewport = ref(0);
     const heightHeader = ref(56);
+    const heightPanel = ref(180);
 
     const heightContent = computed(() => {
-        return heightViewport.value - heightHeader.value + 80;
+        return heightViewport.value - heightHeader.value - heightPanel.value - 40;
     });
 
-    
     return {
-        heightViewport, heightHeader, heightContent
+        heightViewport, heightHeader, heightPanel, heightContent
     };
 });
