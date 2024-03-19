@@ -1,78 +1,169 @@
 import { defineStore } from 'pinia';
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 
 
 export const useTypingContentStore = defineStore('typingContentStore', () => {
 
-    const foo = ref("");
-
-    const data = ref("");
-
-    const getFoo = computed(() => foo.value);
-
-    const setFoo = async () => { foo.value = 1; };
-
+    const contentData = ref([]);
+    
     const loadDemoContent = async (filename) => {
         return new Promise((resolve, reject) => {
             fetch(filename)
             .then((response) => {
-                console.log('response text:', response.headers.get("Content-Type"));
-                //console.log('response text2:', response.text());
-                response.text().then((out) => {
-                    console.log('textout: ', out); foo.value = out;
-                    let utf8Encode = new TextEncoder();
-                    let out2 = utf8Encode.encode(out);
-                    console.log('bytes', out2);
+                
+                if(response.headers.get("Content-Type") !== 'text/plain') {
+                    contentData.value = [];
+                    reject({error: "'" + filename + "' has wrong content type"});
+                }
 
-                    console.log('byte: ', out2[0]);
-                    let isText = true;
-                    out2.forEach(b => {
-                        if(b > 127) {
-                            console.log('no text file');
+                let isText = true;
+               
+                response.text().then((loadedText) => {
+                    let utf8Encode = new TextEncoder();
+                    let loadedTextBytes = utf8Encode.encode(loadedText);
+                    loadedTextBytes.forEach(ltb => {
+                        if(ltb > 127) {
                             isText = false;
                             return;
                         }
                     });
                     
-                    //13 10 is Enter
-                    //32 is space
-                    //9 is tab
-
-                    let obj = [];
                     if(isText) {
-                        out2.forEach((b,i) => {
-                            let char = String.fromCharCode(b);
-                            let type = "char";
-                            if(char === '\r') { return; };
-                            if(char === '\n') { type = "lf"; char = ""; };
-                            if(char === '\t') { type = "tab"; char = ""; };
-                            if(char === ' ') { type = "spaces"; char = ""; };
-
-                            obj.push({
-                                id: i,
-                                char: char,
-                                type: type
-                            });
-                        });
-                        
+                        contentData.value = generateContentData(loadedTextBytes);
+                        resolve();
+                    } else {
+                        contentData.value = [];
+                        reject({error: "'" + filename + "' is not a text file"});
                     }
-
-                    console.log('obj', obj);
-                    data.value = obj;
-                    
-
-                    
-            } );
-                
-            
-                resolve();
+                });
             })
             .catch((err)=> {
-                console.log('err fetch');
-                reject(err);
+                contentData.value = [];
+                reject({error: "error fetching file: '" + filename + "'", errorObjct: err});
+               
             });
         });
     };
 
-    return {foo, data, getFoo, setFoo, loadDemoContent};
+    const loadContentFromCustomFile = async (file) => {
+        return new Promise((resolve, reject) => {
+          if(file.type !== 'text/plain') {
+              contentData.value = [];
+              reject({error: "'" + file.name + "' has wrong content type"});
+          }
+
+          let isText = true;
+
+          getTextFile(file)
+          .then((txtdata) => {
+              let loadedTextBytes = new Uint8Array(txtdata);
+              console.log("bb", loadedTextBytes);
+              loadedTextBytes.forEach(ltb => {
+                if(ltb > 127) {
+                    isText = false;
+                    return;
+                }
+              });
+              
+              if(isText) {
+                contentData.value = generateContentData(loadedTextBytes);
+                resolve();
+              } else {
+                  contentData.value = [];
+                  reject({error: "'" + file.name + "' is not a text file"});
+              }
+          }).catch((err) => {
+            contentData.value = [];
+            reject({error: "error load file", errorObjct: err});
+          });
+        });
+    };
+
+
+    const getTextFile = async (file) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsArrayBuffer(file);
+            reader.onload = () => {
+                resolve(reader.result);
+            };
+            reader.onerror = (error) => reject(error);
+        });
+    };
+
+
+
+    const getContentType = (char) => {
+        let type = "char";
+        if(char === '\r') {
+            type = "none";
+         };
+        if(char === '\n') {
+            type = "lf";
+        };
+        if(char === ' ' || char === '\t') {
+            type = "space";
+        };
+
+        return type;
+
+    };
+
+    const generateContentData = (loadedTextBytes) => {
+        let dataObject = [];
+        let lastContentType = null;
+        let contentBlock = {};
+
+        loadedTextBytes.forEach((b, i) => {
+            let char = String.fromCharCode(b);
+            let type = getContentType(char);
+
+            char = type === 'char' ? char
+                : type === 'space' ? '_' : '';
+                
+            if(i === 0 || lastContentType !== type) {
+                if(i !== 0) {
+                    dataObject.push(contentBlock);
+                }
+                lastContentType = type;
+
+                contentBlock = {
+                    type: type,
+                    chars: []
+                };
+
+                contentBlock.chars.push({
+                    char: char,
+                    failed: null,
+                    failedChar: "",
+                    keypressTimeStamp: null
+                });
+
+            } else {
+                lastContentType = type;
+                contentBlock.chars.push({
+                    char: char,
+                    failed: null,
+                    failedChar: "",
+                    keypressTimeStamp: null
+                });
+            }
+        });
+
+        dataObject = dataObject.filter(item => item.type != 'none');
+        
+        return dataObject;
+    };
+
+    const removeProgressDataFromContentData = () => {
+        contentData.value.forEach(cd => {
+            cd.chars.forEach(ch => {
+                ch.failed = null;
+                ch.failedChar = "";
+                ch.keypressTimeStamp = null;
+            });
+        });
+    };
+
+    return {contentData, loadDemoContent, loadContentFromCustomFile, removeProgressDataFromContentData};
 });
