@@ -3,10 +3,12 @@ import { ref } from 'vue';
 
 export const useAppStateStore = defineStore('appStateStore', () => {
 
-    const ignoreCapitalize = ref(false);
+    const typingProgressEnabled = ref(true);
+    const ignoreCapitalizeEnabled = ref(true);
+    const keySoundEnabled = ref(true);
 
     return {
-        ignoreCapitalize
+        typingProgressEnabled , ignoreCapitalizeEnabled, keySoundEnabled
     };
 });
 
