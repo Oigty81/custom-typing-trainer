@@ -1,6 +1,6 @@
 <script setup>
 
-import { ref, computed, onUpdated } from 'vue';
+import { ref, computed, onMounted, onUpdated } from 'vue';
 
 import { useUiStore } from '@/stores/ui.js';
 import { useAppControllerStore  } from '@/stores/appController';
@@ -10,10 +10,15 @@ const uiStore = useUiStore();
 const appControllerStore = useAppControllerStore();
 const typingContentStore =  useTypingContentStore();
 
+const typingContainerElement = ref(null);
 const currentTypingPositionDivRefs = ref(null);
 
+onMounted(() => {
+  typingContainerElement.value = document.getElementById("typing-container");;
+});
+
 onUpdated(() => {
-  console.log('update component'); // remove later;
+  console.log('update component'); //TODO: remove later;
   
 });
 
@@ -24,7 +29,7 @@ onUpdated(() => {
     id="typing-container"
     class="box-1 q-ma-xs q-pa-xs"
     style="overflow-x: hidden; overflow-y: auto;"
-    :style="{'min-height': uiStore.heightContent + 'px', 'height': uiStore.heightContent + 'px'}"
+    :style="{'min-height': uiStore.heightTypingField + 'px', 'height': uiStore.heightTypingField + 'px'}"
   >
     <div class="content-container">
       <div
@@ -38,7 +43,7 @@ onUpdated(() => {
           <div
             v-for="(char, ix_char) in block.chars"
             :key="ix_char"
-            class="char-div"
+            class="char-div font-serif"
             :class="{
               'char-current': ix_block === appControllerStore.currentPositionBlock && ix_char === appControllerStore.currentPositionChar,
               'char-good': char.failed === false,
@@ -48,7 +53,7 @@ onUpdated(() => {
             {{ char.char }}
             <div
               v-if="char.failed === true"
-              class="char-failure-div"
+              class="char-failure-div font-arial"
             >
               {{ char.failedChar }}
             </div>
@@ -68,17 +73,18 @@ onUpdated(() => {
 }
 
 .block-div {
-  margin: 0.05rem 0.08rem;
+  margin: 0.45rem 0.00rem;
   height: 2rem;
-  padding: 0.05rem;
+  //padding: 0.05rem;
   user-select: none;
 }
 
 .char-div {
   position: relative;
   display: inline;
-	font-size: 1.5rem;
+	font-size: 1.8rem;
   text-align: center;
+  letter-spacing: .15rem;
 }
 
 .char-current {
@@ -101,6 +107,7 @@ onUpdated(() => {
 
 .char-good {
   background-color: $positive;
+  opacity: 0.4;
 }
 
 .char-bad {
