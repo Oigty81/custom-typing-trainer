@@ -7,11 +7,11 @@ export const useUiStore = defineStore('uiStore', () => {
     const heightHeader = ref(56);
     const heightPanel = ref(180);
 
-    const heightContent = computed(() => {
+    const heightTypingField = computed(() => {
         return heightViewport.value - heightHeader.value - heightPanel.value - 40;
     });
 
     return {
-        heightViewport, heightHeader, heightPanel, heightContent
+        heightViewport, heightHeader, heightPanel, heightTypingField
     };
 });
