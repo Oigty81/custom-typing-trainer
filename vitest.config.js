@@ -7,7 +7,7 @@ export default defineConfig({
         Vue({
             template: {
               compilerOptions: {
-                isCustomElement: (tag) => ['q-btn', 'q-input'].includes(tag),
+                isCustomElement: (tag) => ['q-btn'].includes(tag),
               }
             }
         }),

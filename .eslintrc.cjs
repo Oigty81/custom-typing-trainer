@@ -28,7 +28,6 @@ module.exports = {
     quotes: "off",
     "spaced-comment": "off",
     "keyword-spacing": "off",
-    "@typescript-eslint/explicit-module-boundary-types": "off",
     "no-extra-semi": "off",
     //"semi": "off",
     "no-unused-vars": "warn",
