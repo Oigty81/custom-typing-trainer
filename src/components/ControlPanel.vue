@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watch } from 'vue';
+import { ref, watch } from 'vue';
 import { useQuasar } from 'quasar';
 
 import { useUiStore } from '@/stores/ui.js';
@@ -16,21 +16,22 @@ const typingContentStore =  useTypingContentStore();
 
 const fileToUpload = ref(null);
 
-
-
 const resetProgress = () => {
+  blurActiveElement();
   appControllerStore.currentPositionBlock = 0;
   appControllerStore.currentPositionChar = 0;
   typingContentStore.removeProgressDataFromContentData();
 };
 
 const clearContent = () => {
+  blurActiveElement();
   appControllerStore.currentPositionBlock = 0;
   appControllerStore.currentPositionChar = 0;
   typingContentStore.contentData = [];
 };
 
 const loadDemoFile = (filename) => {
+  blurActiveElement();
   appStateStore.typingProgressEnabled = false;
   typingContentStore.loadDemoContent(filename)
   .then(() => {
@@ -70,6 +71,12 @@ watch(fileToUpload, () => {
   }
   }, {deep: false, immediate: false }
 );
+
+
+const blurActiveElement = () => {
+  document.activeElement.blur(); //TODO: find better solution
+};
+
 </script>
 
 <template>
@@ -108,7 +115,7 @@ watch(fileToUpload, () => {
           no-caps
           size="sm"
           style="width: 100%;"
-          @click="loadDemoFile('demotext.txt')"
+          @click="loadDemoFile('demotext1.txt')"
         >
           Load Demo 1
         </q-btn>
@@ -131,6 +138,7 @@ watch(fileToUpload, () => {
             <q-checkbox
               v-model="appStateStore.ignoreCapitalizeEnabled"
               label="ignore capitalize"
+              @click="blurActiveElement"
             />
           </div>
         </div>
@@ -139,6 +147,7 @@ watch(fileToUpload, () => {
             <q-checkbox
               v-model="appStateStore.keySoundEnabled"
               label="keysound enabled"
+              @click="blurActiveElement"
             />
           </div>
         </div>
