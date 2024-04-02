@@ -1,11 +1,9 @@
 <script setup>
 import { useUiStore } from '@/stores/ui.js';
 import { useAppControllerStore  } from '@/stores/appController';
-import { useTypingContentStore  } from '@/stores/typingContent';
 
 const uiStore = useUiStore();
 const appControllerStore = useAppControllerStore();
-const typingContentStore =  useTypingContentStore();
 
 </script>
 
@@ -14,12 +12,26 @@ const typingContentStore =  useTypingContentStore();
     class="box-1 q-ma-xs"
     :style="{'height': uiStore.heightPanel + 'px'}"
   >
-    <div class="row">
+    <div class="row q-mt-xl q-ma-sm">
       <div class="col-6">
-        .. {{ appControllerStore.currentPositionBlock }} // {{ appControllerStore.currentPositionChar }}
+        <span
+          class="text-h5"
+        >speed of typing: {{ appControllerStore.wordsPerMinute }}
+        </span>
+        <span class="wpm-container">
+          <span class="wpm-content">WpM</span>
+        </span>
       </div>
       <div class="col-6">
-        ..
+        <span
+          class="text-h5"
+        >accuracy: {{ appControllerStore.accuracyInPercent.toFixed(2) }} %
+        </span>
+      </div>
+    </div>
+    <div class="row q-mt-md q-ma-sm">
+      <div class="col">
+        Debug:> current Block: {{ appControllerStore.currentPositionBlock }}  / current char position: {{ appControllerStore.currentPositionChar }}
       </div>
     </div>
   </div>
