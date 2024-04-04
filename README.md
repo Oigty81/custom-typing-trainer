@@ -5,7 +5,7 @@
 
 ### Prerequisite
 
-- [Node.JS v16](https://nodejs.org/download/release/v16.9.1/)
+- [Node.JS v18](https://nodejs.org/download/release/v18.18.0/)
 
 ### Install the repository
 ```
