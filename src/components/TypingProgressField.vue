@@ -9,6 +9,13 @@ const uiStore = useUiStore();
 const appControllerStore = useAppControllerStore();
 const typingContentStore =  useTypingContentStore();
 
+const props = defineProps({
+  typingFinished: { type: Boolean, required: true, default: () => {
+            return false;
+        }
+    },
+});
+
 const typingContainerElement = ref(null);
 
 onMounted(() => {
@@ -75,7 +82,7 @@ const scrollToCurrentTypingPosition = () => {
             :key="ix_char"
             class="char-div font-serif"
             :class="{
-              'char-current': ix_block === appControllerStore.currentPositionBlock && ix_char === appControllerStore.currentPositionChar,
+              'char-current': ix_block === appControllerStore.currentPositionBlock && ix_char === appControllerStore.currentPositionChar && !props.typingFinished,
               'char-good': char.failed === false,
               'char-bad': char.failed === true,
             }"
