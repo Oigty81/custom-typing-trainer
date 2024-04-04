@@ -37,17 +37,19 @@ export const useAppControllerStore = defineStore('appControllerStore', () => {
         handleMeasurementDataWordPerMinute(typingContentStore.contentData[currentPositionBlock.value]);
 
         let currentCharTocheck = "";
+        let currentKey = null;
 
         if(appStateStore.ignoreCapitalizeEnabled) {
-                        
             currentCharTocheck =  typingContentStore.contentData[currentPositionBlock.value].chars[currentPositionChar.value].char.toLowerCase();
+            currentKey = key.toLowerCase();
         } else {
             currentCharTocheck =  typingContentStore.contentData[currentPositionBlock.value].chars[currentPositionChar.value].char;
+            currentKey = key;
         }
 
         if(
-            currentCharTocheck === key ||
-            (typingContentStore.contentData[currentPositionBlock.value].type === "space" && ' ' === key )
+            currentCharTocheck === currentKey ||
+            (typingContentStore.contentData[currentPositionBlock.value].type === "space" && ' ' === currentKey)
             ) {
             typingContentStore.contentData[currentPositionBlock.value].chars[currentPositionChar.value].failed = false;
             if(appStateStore.keySoundEnabled) {
@@ -55,14 +57,8 @@ export const useAppControllerStore = defineStore('appControllerStore', () => {
                 audio.play();
             }
         } else {
-            let failedChar = "";
-            if(appStateStore.ignoreCapitalizeEnabled) {
-                failedChar = key.toLowerCase();
-            } else {
-                failedChar = key;
-            }
             typingContentStore.contentData[currentPositionBlock.value].chars[currentPositionChar.value].failed = true;
-            typingContentStore.contentData[currentPositionBlock.value].chars[currentPositionChar.value].failedChar = failedChar;
+            typingContentStore.contentData[currentPositionBlock.value].chars[currentPositionChar.value].failedChar = currentKey;
             if(appStateStore.keySoundEnabled) {
                 let audio = new Audio('./bad.mp3');
                 audio.play();
