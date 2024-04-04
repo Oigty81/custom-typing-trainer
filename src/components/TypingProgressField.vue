@@ -72,7 +72,7 @@ const scrollToCurrentTypingPosition = () => {
       <div
         v-for="(block, ix_block) in typingContentStore.contentData"
         :key="ix_block"
-        :class="{'line-break-div': block.type === 'lf', 'block-div': block.type !== 'lf', 'char-content-space': block.type === 'space'}"
+        :class="{'line-break-div': block.type === 'lf', 'block-div': block.type !== 'lf'}"
       >
         <div
           v-if="block.type !== 'lf'"
@@ -83,6 +83,7 @@ const scrollToCurrentTypingPosition = () => {
             class="char-div font-serif"
             :class="{
               'char-current': ix_block === appControllerStore.currentPositionBlock && ix_char === appControllerStore.currentPositionChar && !props.typingFinished,
+              'char-content-space': block.type === 'space',
               'char-good': char.failed === false,
               'char-bad': char.failed === true,
             }"
@@ -112,7 +113,6 @@ const scrollToCurrentTypingPosition = () => {
 .block-div {
   margin: 0.45rem 0.00rem;
   height: 2rem;
-  //padding: 0.05rem;
   user-select: none;
 }
 
@@ -121,7 +121,7 @@ const scrollToCurrentTypingPosition = () => {
   display: inline;
 	font-size: 1.8rem;
   text-align: center;
-  letter-spacing: .15rem;
+  letter-spacing: 0.09rem;
 }
 
 .char-current {
@@ -140,6 +140,7 @@ const scrollToCurrentTypingPosition = () => {
 
 .char-content-space {
     color: #00000020;
+    padding: 0 0.4rem;
 }
 
 .char-good {
