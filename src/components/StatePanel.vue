@@ -16,7 +16,7 @@ const appControllerStore = useAppControllerStore();
       <div class="col-6">
         <span
           class="text-h5"
-        >speed of typing: {{ appControllerStore.wordsPerMinute }}
+        >speed of typing: {{ appControllerStore.wordsPerMinute.toFixed(0) }}
         </span>
         <span class="wpm-container">
           <span class="wpm-content">WpM</span>
@@ -31,7 +31,7 @@ const appControllerStore = useAppControllerStore();
     </div>
     <div class="row q-mt-md q-ma-sm">
       <div class="col">
-        Debug:> current Block: {{ appControllerStore.currentPositionBlock }}  / current char position: {{ appControllerStore.currentPositionChar }}
+        Debug: current block: {{ appControllerStore.currentPositionBlock }}  / current char position: {{ appControllerStore.currentPositionChar }}
       </div>
     </div>
   </div>

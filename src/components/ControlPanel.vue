@@ -20,6 +20,7 @@ const resetProgress = () => {
   blurActiveElement();
   appControllerStore.currentPositionBlock = 0;
   appControllerStore.currentPositionChar = 0;
+  appControllerStore.measurementDataWordPerMinute = [];
   typingContentStore.removeProgressDataFromContentData();
 };
 
@@ -27,6 +28,7 @@ const clearContent = () => {
   blurActiveElement();
   appControllerStore.currentPositionBlock = 0;
   appControllerStore.currentPositionChar = 0;
+  appControllerStore.measurementDataWordPerMinute = [];
   typingContentStore.contentData = [];
 };
 
