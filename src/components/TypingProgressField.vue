@@ -163,6 +163,7 @@ const scrollToCurrentTypingPosition = () => {
   min-width: 0.8rem;
   min-height: 0.8rem;
   max-height: 1rem;
+  z-index: 999;
 }
 
 .line-break-div {
