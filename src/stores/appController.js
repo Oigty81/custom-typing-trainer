@@ -45,8 +45,6 @@ export const useAppControllerStore = defineStore('appControllerStore', () => {
             currentCharTocheck =  typingContentStore.contentData[currentPositionBlock.value].chars[currentPositionChar.value].char;
         }
 
-        typingContentStore.contentData[currentPositionBlock.value].chars[currentPositionChar.value].keypressTimeStamp = new Date();
-
         if(
             currentCharTocheck === key ||
             (typingContentStore.contentData[currentPositionBlock.value].type === "space" && ' ' === key )
@@ -171,8 +169,6 @@ export const useAppControllerStore = defineStore('appControllerStore', () => {
             }
         });
         
-        console.log('timeForWords', totalTimeForWords / 60000, " words: ", finishedWord);
-
         if(totalTimeForWords !== 0) {
             return finishedWord / (totalTimeForWords / 60000);
         } else {
