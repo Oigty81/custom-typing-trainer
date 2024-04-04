@@ -18,18 +18,12 @@ const fileToUpload = ref(null);
 
 const resetProgress = () => {
   blurActiveElement();
-  appControllerStore.currentPositionBlock = 0;
-  appControllerStore.currentPositionChar = 0;
-  appControllerStore.measurementDataWordPerMinute = [];
-  typingContentStore.removeProgressDataFromContentData();
+  appControllerStore.resetProgress();
 };
 
 const clearContent = () => {
   blurActiveElement();
-  appControllerStore.currentPositionBlock = 0;
-  appControllerStore.currentPositionChar = 0;
-  appControllerStore.measurementDataWordPerMinute = [];
-  typingContentStore.contentData = [];
+  appControllerStore.resetProgress(true);
 };
 
 const loadDemoFile = (filename) => {

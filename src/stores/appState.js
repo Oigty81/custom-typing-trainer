@@ -6,9 +6,10 @@ export const useAppStateStore = defineStore('appStateStore', () => {
     const typingProgressEnabled = ref(true);
     const ignoreCapitalizeEnabled = ref(true);
     const keySoundEnabled = ref(true);
+    const isTypingFinished = ref(false);
 
     return {
-        typingProgressEnabled , ignoreCapitalizeEnabled, keySoundEnabled
+        typingProgressEnabled , ignoreCapitalizeEnabled, keySoundEnabled, isTypingFinished
     };
 });
 

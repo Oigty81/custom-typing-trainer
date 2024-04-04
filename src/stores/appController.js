@@ -6,7 +6,7 @@ import { useTypingContentStore  } from '@/stores/typingContent';
 
 export const useAppControllerStore = defineStore('appControllerStore', () => {
 
-    const  appState =  useAppStateStore();
+    const  appStateStore =  useAppStateStore();
     const  typingContentStore =  useTypingContentStore();
 
     const currentPositionBlock = ref (0);
@@ -15,7 +15,7 @@ export const useAppControllerStore = defineStore('appControllerStore', () => {
     const measurementDataWordPerMinute = ref([]);
 
     const keypressHandler = (e) => {
-        if(appState.typingProgressEnabled) {
+        if(appStateStore.typingProgressEnabled) {
 
             if(typingContentStore.contentData.length === 0) {
                 return;
@@ -27,6 +27,9 @@ export const useAppControllerStore = defineStore('appControllerStore', () => {
 
     const progressTypingCheck = (key) => {
         if(isTypingContentEndPosition()) {
+            if(appStateStore.isTypingFinished !== true) {
+                appStateStore.isTypingFinished = true;
+            }
             handleCloseCurrentMeasurementDataWordPerMinute();
             return;
         }
@@ -35,7 +38,7 @@ export const useAppControllerStore = defineStore('appControllerStore', () => {
 
         let currentCharTocheck = "";
 
-        if(appState.ignoreCapitalizeEnabled) {
+        if(appStateStore.ignoreCapitalizeEnabled) {
                         
             currentCharTocheck =  typingContentStore.contentData[currentPositionBlock.value].chars[currentPositionChar.value].char.toLowerCase();
         } else {
@@ -49,20 +52,20 @@ export const useAppControllerStore = defineStore('appControllerStore', () => {
             (typingContentStore.contentData[currentPositionBlock.value].type === "space" && ' ' === key )
             ) {
             typingContentStore.contentData[currentPositionBlock.value].chars[currentPositionChar.value].failed = false;
-            if(appState.keySoundEnabled) {
+            if(appStateStore.keySoundEnabled) {
                 let audio = new Audio('./good.mp3');
                 audio.play();
             }
         } else {
             let failedChar = "";
-            if(appState.ignoreCapitalizeEnabled) {
+            if(appStateStore.ignoreCapitalizeEnabled) {
                 failedChar = key.toLowerCase();
             } else {
                 failedChar = key;
             }
             typingContentStore.contentData[currentPositionBlock.value].chars[currentPositionChar.value].failed = true;
             typingContentStore.contentData[currentPositionBlock.value].chars[currentPositionChar.value].failedChar = failedChar;
-            if(appState.keySoundEnabled) {
+            if(appStateStore.keySoundEnabled) {
                 let audio = new Audio('./bad.mp3');
                 audio.play();
             }
@@ -178,9 +181,23 @@ export const useAppControllerStore = defineStore('appControllerStore', () => {
         
     });
 
+    const resetProgress = (clearContent = false) => {
+        currentPositionBlock.value = 0;
+        currentPositionChar.value = 0;
+        measurementDataWordPerMinute.value = [];
+        appStateStore.isTypingFinished = false;
+
+        if(clearContent) {
+            typingContentStore.contentData = [];
+        } else {
+            typingContentStore.removeProgressDataFromContentData();
+        }
+    };
+
     return {
         currentPositionBlock, currentPositionChar, measurementDataWordPerMinute,
-        accuracyInPercent, wordsPerMinute
+        accuracyInPercent, wordsPerMinute,
+        resetProgress
 
     };
 });
