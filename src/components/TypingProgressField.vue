@@ -1,6 +1,5 @@
 <script setup>
-
-import { ref, computed, onMounted, onUpdated } from 'vue';
+import { ref, watch, onMounted, onUpdated } from 'vue';
 
 import { useUiStore } from '@/stores/ui.js';
 import { useAppControllerStore  } from '@/stores/appController';
@@ -11,16 +10,47 @@ const appControllerStore = useAppControllerStore();
 const typingContentStore =  useTypingContentStore();
 
 const typingContainerElement = ref(null);
-const currentTypingPositionDivRefs = ref(null);
 
 onMounted(() => {
   typingContainerElement.value = document.getElementById("typing-container");;
 });
 
 onUpdated(() => {
-  console.log('update component'); //TODO: remove later;
-  
+  scrollToCurrentTypingPosition();
 });
+
+watch(appControllerStore, () => {
+  if(appControllerStore.currentPositionBlock === 0) {
+    typingContainerElement.value.scrollTo({
+          top: 0,
+          left: 0,
+          behavior: "smooth",
+        });
+  }
+});
+
+const scrollToCurrentTypingPosition = () => {
+  let tc = typingContainerElement.value;
+  let charCurrent = document.getElementsByClassName("char-current")[0];
+
+  const charLineDistanceFromBorder = 35;
+
+  if(charCurrent !== undefined) {
+    let rectContainer = tc.getBoundingClientRect();
+    let rectCharCurrent = charCurrent.getBoundingClientRect();
+    let containerBottom = rectContainer.top + tc.offsetHeight;
+
+    if(rectCharCurrent.top + charLineDistanceFromBorder + tc.scrollTop > containerBottom) {
+      let computedScrollToBottom = rectCharCurrent.top + tc.scrollTop + charLineDistanceFromBorder - containerBottom;
+      
+      tc.scrollTo({
+          top: computedScrollToBottom,
+          left: 0,
+          behavior: "smooth",
+        });
+    }
+  }
+};
 
 </script>
 
@@ -132,5 +162,4 @@ onUpdated(() => {
     flex-basis: 100%;
     height: 0;
 }
-
 </style>
