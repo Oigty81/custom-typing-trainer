@@ -28,6 +28,7 @@ const clearContent = () => {
 
 const loadDemoFile = (filename) => {
   blurActiveElement();
+  fileToUpload.value = null;
   appStateStore.typingProgressEnabled = false;
   typingContentStore.loadDemoContent(filename)
   .then(() => {
@@ -39,7 +40,7 @@ const loadDemoFile = (filename) => {
       progress: true,
       message: "no valid text file!",
       color: 'negative',
-      position: 'top-right'
+      position: 'top'
     });
     console.log('was error: ', err.error);
   });
