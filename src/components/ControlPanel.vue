@@ -46,25 +46,25 @@ const loadDemoFile = (filename) => {
 };
 
 watch(fileToUpload, () => {
-  appStateStore.typingProgressEnabled = false;
-  if(fileToUpload.value != null) {
-    typingContentStore.loadContentFromCustomFile(fileToUpload.value)
-    .then(() => {
-      resetProgress();
-      appStateStore.typingProgressEnabled = true;
-      fileToUpload.value = null;
-    })
-    .catch(() => {
-      appStateStore.typingProgressEnabled = true;
-      fileToUpload.value = null;
-      $q.notify({
-            progress: true,
-            message: "no valid text file!",
-            color: 'negative',
-            position: 'top-right'
-          });
-    });
-  }
+    if(fileToUpload.value != null) {
+      typingContentStore.loadContentFromCustomFile(fileToUpload.value)
+      .then(() => {
+        resetProgress();
+        appStateStore.typingProgressEnabled = true;
+      })
+      .catch(() => {
+        appStateStore.typingProgressEnabled = true;
+        fileToUpload.value = null;
+        $q.notify({
+              progress: true,
+              message: "no valid text file!",
+              color: 'negative',
+              position: 'top'
+            });
+      });
+    } else {
+      clearContent();
+    }
   }, {deep: false, immediate: false }
 );
 
