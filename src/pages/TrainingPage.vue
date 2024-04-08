@@ -38,7 +38,7 @@ watch(appStateStoreRefs.isTypingFinished, (newValue, oldValue) => {
         html: true,
         ok: {
           push: true,
-          color: 'primary'
+          color: 'secondary'
         },
       }).onDismiss(() => {
         appControllerStore.resetProgress();
