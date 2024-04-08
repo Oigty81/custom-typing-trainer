@@ -1,16 +1,37 @@
 #q-notify {
-  border: solid 2rem #0c0c0c !important;
+  border: solid 2rem $primary !important;
 }
 
+.q-btn-1 {
+  background-color: $accent !important;
+  & .q-btn__content {
+    color: $font-color-main;
+  }
+}
 
+.q-checkbox-1  {
+  & .q-checkbox__bg {
+    border: solid 0.04rem $primary !important;
+    color: transparent;
+  }
 
-.filepicker-1  {
-  border: 1px solid $secondary;
+  & .q-checkbox__svg {
+    color: $font-color-main;
+  }
+}
+
+.q-filepicker-1  {
+  border: 1px solid $primary;
   min-width: 100%;
-  // min-height: 80px;
-
+  
   & .q-field__inner,
   & .q-field__control {
     min-height: 100% !important;
+    color: $font-color-main !important;
+  }
+  & .q-field__label,
+  & .q-field__native,
+  & .q-field__prepend {
+    color: $font-color-main !important;
   }
 }

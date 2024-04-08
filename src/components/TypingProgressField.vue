@@ -135,7 +135,7 @@ const scrollToCurrentTypingPosition = () => {
   left    : 0;
   bottom  : 0;
   width   : 1rem;
-  border-bottom:0.15rem solid #404040;
+  border-bottom:0.15rem solid $info;
 }
 
 .char-content-space {
@@ -145,7 +145,6 @@ const scrollToCurrentTypingPosition = () => {
 
 .char-good {
   background-color: $positive;
-  opacity: 0.4;
 }
 
 .char-bad {
@@ -160,7 +159,7 @@ const scrollToCurrentTypingPosition = () => {
   background-color: $warning;
   top: -9px;
   right: 0px;
-  opacity: 0.7;
+  opacity: 0.8;
   min-width: 0.8rem;
   min-height: 0.8rem;
   max-height: 1rem;

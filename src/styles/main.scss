@@ -1,3 +1,4 @@
+@import 'variables.scss';
 @import 'custom-quasar-components.scss';
 
 html {
@@ -6,6 +7,8 @@ html {
 
 body {
     overflow: hidden;
+    background-color: $body-color;
+    color: $font-color-main;
 }
 
 .font-arial {
@@ -17,7 +20,8 @@ body {
 }
 
 .box-1 {
-    border: 0.02rem solid #c0c0c0;
+    border: 0.02rem solid $primary;
+    background-color: $box-color;
 }
 
 .wpm-container {

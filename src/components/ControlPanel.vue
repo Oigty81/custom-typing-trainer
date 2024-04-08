@@ -87,6 +87,7 @@ const blurActiveElement = () => {
           <div class="col-12 q-px-sm">
             <q-btn
               no-caps
+              class="q-btn-1"
               size="sm"
               style="width: 100%;"
               @click="resetProgress()"
@@ -97,6 +98,7 @@ const blurActiveElement = () => {
           <div class="col-12 q-px-sm q-pt-sm">
             <q-btn
               no-caps
+              class="q-btn-1"
               size="sm"
               style="width: 100%;"
               @click="clearContent()"
@@ -110,6 +112,7 @@ const blurActiveElement = () => {
       <div class="col-3 offset-3 q-px-sm">
         <q-btn
           no-caps
+          class="q-btn-1"
           size="sm"
           style="width: 100%;"
           @click="loadDemoFile('demotext1.txt')"
@@ -120,6 +123,7 @@ const blurActiveElement = () => {
       <div class="col-3 q-px-sm">
         <q-btn
           no-caps
+          class="q-btn-1"
           size="sm"
           style="width: 100%;"
           @click="loadDemoFile('demotext2.txt')"
@@ -134,6 +138,7 @@ const blurActiveElement = () => {
           <div class="col-12">
             <q-checkbox
               v-model="appStateStore.ignoreCapitalizeEnabled"
+              class="q-checkbox-1"
               label="ignore capitalize"
               @click="blurActiveElement"
             />
@@ -143,6 +148,7 @@ const blurActiveElement = () => {
           <div class="col-12">
             <q-checkbox
               v-model="appStateStore.keySoundEnabled"
+              class="q-checkbox-1"
               label="keysound enabled"
               @click="blurActiveElement"
             />
@@ -153,7 +159,7 @@ const blurActiveElement = () => {
         <q-file
           v-model="fileToUpload"
           clearable
-          class="filepicker-1"
+          class="q-filepicker-1"
           filled
           label="choose txt-file for training"
           accept=".txt"
