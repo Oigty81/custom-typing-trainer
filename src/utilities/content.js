@@ -59,6 +59,11 @@ export const generateContentData = (contentString) => {
         }
     }
 
+    // add possibly last block
+    if(contentBlock.chars !== undefined && contentBlock.chars.length > 0) {
+        dataObject.push(contentBlock);
+    }
+
     dataObject = dataObject.filter(item => item.type != 'none');
     
     //TODO: find better solution for last char to trigger finish typing
