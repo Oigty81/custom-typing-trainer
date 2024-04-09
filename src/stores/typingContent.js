@@ -12,10 +12,10 @@ export const useTypingContentStore = defineStore('typingContentStore', () => {
       return new Promise((resolve, reject) => {
           fetch(filename)
           .then((response) => {
-              if(response.headers.get("Content-Type") !== 'text/plain') {
-                  contentData.value = [];
-                  reject({error: "'" + filename + "' has wrong content type"});
-              }
+            if(!response.headers.get("Content-Type").includes('text/plain')) {
+                contentData.value = [];
+                reject({error: "'" + filename + "' has wrong content type"});
+            }
 
               response.text().then((loadedText) => {
                   let utf8Encode = new TextEncoder(/*"utf-8"*/);
