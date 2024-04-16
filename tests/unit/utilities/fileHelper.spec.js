@@ -1,5 +1,5 @@
 import { describe, expect, test, vi} from "vitest";
-import { FileReaderMockResolve, FileReaderMockReject } from "./filereader-mocks";
+import { FileReaderMockResolve, FileReaderMockReject } from "../_helper/filereader-mocks";
 
 import { getTextFile, simpleCheckIsText  } from '@/utilities/fileHelper.js';
 
