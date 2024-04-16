@@ -27,7 +27,7 @@ const clearContent = () => {
 };
 
 const loadDemoFile = (filename) => {
-  blurActiveElement();
+  ////blurActiveElement(); //TODO remove redundant method call
   fileToUpload.value = null;
   appStateStore.typingProgressEnabled = false;
   typingContentStore.loadDemoContent(filename)
