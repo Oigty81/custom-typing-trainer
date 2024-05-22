@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:gh": "vite build --mode ghpages --emptyOutDir --outDir ../../__temp/ctt/dist",
     "preview": "vite preview",
     "test": "vitest",
     "coverage": "vitest run --coverage"

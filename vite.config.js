@@ -12,6 +12,7 @@ export default ({ mode }) => {
   process.env = {...process.env, ...loadEnv(mode, process.cwd())};
 
   return defineConfig({
+    base: '' + process.env.VITE_LOCAL_WEBAPP_BASE,
     build: {
       emptyOutDir: false,
     },
