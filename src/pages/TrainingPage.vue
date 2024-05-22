@@ -36,6 +36,7 @@ watch(appStateStoreRefs.isTypingFinished, (newValue, oldValue) => {
         title: '<span class="text-h4">Typing finished!</span>',
         message: dialogMessage,
         html: true,
+        persistent: true,
         ok: {
           push: true,
           color: 'secondary'
