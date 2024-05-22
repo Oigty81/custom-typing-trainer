@@ -85,51 +85,27 @@ const blurActiveElement = () => {
       <div class="col-3">
         <div class="row">
           <div class="col-12 q-px-sm">
-            <q-btn
-              no-caps
-              class="q-btn-1"
-              size="sm"
-              style="width: 100%;"
-              @click="resetProgress()"
-            >
+            <g-custom-button @click="resetProgress()">
               Reset Progress
-            </q-btn>
+            </g-custom-button>
           </div>
           <div class="col-12 q-px-sm q-pt-sm">
-            <q-btn
-              no-caps
-              class="q-btn-1"
-              size="sm"
-              style="width: 100%;"
-              @click="clearContent()"
-            >
+            <g-custom-button @click="clearContent()">
               Clear Content
-            </q-btn>
+            </g-custom-button>
           </div>
         </div>
       </div>
       
       <div class="col-3 offset-3 q-px-sm">
-        <q-btn
-          no-caps
-          class="q-btn-1"
-          size="sm"
-          style="width: 100%;"
-          @click="loadDemoFile('demotext1.txt')"
-        >
+        <g-custom-button @click="loadDemoFile('demotext1.txt')">
           Load Demo 1
-        </q-btn>
+        </g-custom-button>
       </div>
       <div class="col-3 q-px-sm">
-        <q-btn
-          no-caps
-          class="q-btn-1"
-          size="sm"
-          style="width: 100%;"
-          @click="loadDemoFile('demotext2.txt')"
-        >
+        <g-custom-button @click="loadDemoFile('demotext2.txt')">
           Load Demo 2
-        </q-btn>
+        </g-custom-button>
       </div>
     </div>
     <div class="row q-mt-md">

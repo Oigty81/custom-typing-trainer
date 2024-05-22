@@ -28,6 +28,9 @@
             ],
             "@/*": [
                 "src/*"
+            ],
+            "@_global/*": [
+                "src/components/_global/*"
             ]
         }
     }

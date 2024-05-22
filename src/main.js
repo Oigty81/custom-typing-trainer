@@ -11,10 +11,14 @@ import '@quasar/extras/fontawesome-v6/fontawesome-v6.css';
 import './styles/main.scss';
 import 'quasar/src/css/index.sass';
 
+import CustomButton from '@/components/_global/CustomButton.vue';
+
 import App from './App.vue';
 
 const store = createPinia();
 const app = createApp(App);
+
+app.component("GCustomButton", CustomButton);
 
 app.use(store);
 app.use(router);
