@@ -1,9 +1,9 @@
 export class AudioMock {
-    constructor(src) {
-        this.src = src;
-    }
+  constructor(src) {
+    this.src = src;
+  }
 
-    async play() {
-        await new Promise((res) => setTimeout(res, 10));
-    };
+  async play() {
+    await new Promise((res) => setTimeout(res, 10));
+  };
 };

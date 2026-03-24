@@ -1,141 +1,206 @@
-import { describe, test, vi, expect } from 'vitest';
-
+import { describe, test, vi, expect, beforeEach } from 'vitest';
 import { shallowMount } from '@vue/test-utils';
 import { createTestingPinia } from '@pinia/testing';
 
 import { useUiStore } from '@/stores/ui.js';
 import { useAppStateStore } from '@/stores/appState';
 import { useAppControllerStore } from '@/stores/appController';
-import { useTypingContentStore  } from '@/stores/typingContent';
+import { useTypingContentStore } from '@/stores/typingContent';
 
-import ControlPanel from '@components/ControlPanel.vue';
-
+import ControlPanel from '@/components/ControlPanel.vue';
 import { useQuasar } from 'quasar';
 
-vi.mock('quasar');
+// -------------------------------------------------------------
+// Quasar mock
+// -------------------------------------------------------------
+vi.mock('quasar', () => ({
+  useQuasar: vi.fn()
+}));
 
-describe("components/ControlPanel.vue", () => {
+// -------------------------------------------------------------
+// Helper: safely mock document.activeElement.blur()
+// -------------------------------------------------------------
+function mockActiveElementBlur() {
+  const spy = vi.fn();
+  Object.defineProperty(document, 'activeElement', {
+    configurable: true,
+    value: { blur: spy }
+  });
+  return spy;
+}
+
+// -------------------------------------------------------------
+// Helper: find g-custom-button instances rendered as <button>
+// -------------------------------------------------------------
+function getBtn(wrapper, index) {
+  const btns = wrapper.findAll('button.g-custom-button');
+  return btns[index];
+}
+
+// -------------------------------------------------------------
+describe('components/ControlPanel.vue', () => {
+
+  beforeEach(() => {
     useQuasar.mockReturnValue({
-        notify: vi.fn().mockImplementation()
+      notify: vi.fn()
+    });
+  });
+
+  // -------------------------------------------------------------
+  test('height style matches uiStore.heightPanel', async () => {
+    const pinia = createTestingPinia();
+    const uiStore = useUiStore(pinia);
+
+    uiStore.heightPanel = 250;
+
+    const wrapper = shallowMount(ControlPanel, {
+      global: {
+        plugins: [pinia],
+        stubs: {
+          'g-custom-button': {
+            template: '<button class="g-custom-button"><slot /></button>'
+          }
+        }
+      }
     });
 
-    test("whether box height style corresponds uiStore.heightPanel", async () => {
-        const pinia = createTestingPinia();
-        const uiStore = useUiStore(pinia);
+    expect(wrapper.find('div').attributes().style).toBe('height: 250px;');
+  });
 
-        uiStore.heightPanel = 250;
+  // -------------------------------------------------------------
+  test('\'Reset Progress\' button triggers resetProgress()', async () => {
+    const pinia = createTestingPinia();
+    const appControllerStore = useAppControllerStore(pinia);
 
-        const wrapper = shallowMount(ControlPanel, {
-            global: {
-                plugins: [ pinia ],
-              },
-        });
-
-        expect(wrapper.findAll('div').at(0).attributes().style).toBe('height: 250px;');
+    const wrapper = shallowMount(ControlPanel, {
+      global: {
+        plugins: [pinia],
+        stubs: {
+          'g-custom-button': {
+            template: '<button class="g-custom-button"><slot /></button>'
+          }
+        }
+      }
     });
 
-    test("whether button 'Reset Progress' blur active element and calls 'appControllerStore.resetProgress()'", async () => {
-        const pinia = createTestingPinia();
-        const appControllerStore = useAppControllerStore(pinia);
-        
-        const wrapper = shallowMount(ControlPanel, {
-            global: {
-                plugins: [ pinia ],
-              },
-        });
-        const spy__blur = (document.activeElement.blur = vi.fn());
-        await wrapper.findAll('q-btn').at(0).trigger('click');
-        expect(spy__blur).toHaveBeenCalledTimes(1);
-        expect(appControllerStore.resetProgress).toHaveBeenCalledTimes(1);
-        expect(appControllerStore.resetProgress).toHaveBeenCalledWith();
-        spy__blur.mockRestore();
+    const blurSpy = mockActiveElementBlur();
+
+    await getBtn(wrapper, 0).trigger('click'); // Reset Progress
+
+    expect(blurSpy).toHaveBeenCalledTimes(1);
+    expect(appControllerStore.resetProgress).toHaveBeenCalledTimes(1);
+  });
+
+  // -------------------------------------------------------------
+  test('\'Clear Content\' button triggers resetProgress(true)', async () => {
+    const pinia = createTestingPinia();
+    const appControllerStore = useAppControllerStore(pinia);
+
+    const wrapper = shallowMount(ControlPanel, {
+      global: {
+        plugins: [pinia],
+        stubs: {
+          'g-custom-button': {
+            template: '<button class="g-custom-button"><slot /></button>'
+          }
+        }
+      }
     });
 
-    test("whether button 'Clear Content' blur active element and calls 'appControllerStore.clearContent()'", async () => {
-        const pinia = createTestingPinia();
-        const appControllerStore = useAppControllerStore(pinia);
-        
-        const wrapper = shallowMount(ControlPanel, {
-            global: {
-                plugins: [ pinia ],
-              },
-        });
+    const blurSpy = mockActiveElementBlur();
 
-        const spy__blur = (document.activeElement.blur = vi.fn());
-        await wrapper.findAll('q-btn').at(1).trigger('click');
-        expect(spy__blur).toHaveBeenCalledTimes(1);
-        expect(appControllerStore.resetProgress).toHaveBeenCalledTimes(1);
-        expect(appControllerStore.resetProgress).toHaveBeenCalledWith(true);
-        spy__blur.mockRestore();
+    await getBtn(wrapper, 1).trigger('click');
+
+    expect(blurSpy).toHaveBeenCalledTimes(1);
+    expect(appControllerStore.resetProgress).toHaveBeenCalledWith(true);
+  });
+
+  // -------------------------------------------------------------
+  // Shared test helpers for Load Demo buttons
+  // -------------------------------------------------------------
+  async function loadDemoSuccess(btnIndex, filename) {
+    const pinia = createTestingPinia({ stubActions: false });
+
+    const appStateStore = useAppStateStore(pinia);
+    const appControllerStore = useAppControllerStore(pinia);
+    const typingContentStore = useTypingContentStore(pinia);
+
+    typingContentStore.loadDemoContent.mockResolvedValue('OK');
+    appStateStore.typingProgressEnabled = false;
+
+    const wrapper = shallowMount(ControlPanel, {
+      global: {
+        plugins: [pinia],
+        stubs: {
+          'g-custom-button': {
+            template: '<button class="g-custom-button"><slot /></button>'
+          }
+        }
+      }
     });
 
-    async function loadDemoSuccess(btnNumber, filename) {
-        const pinia = createTestingPinia();
-        const appStateStore =  useAppStateStore(pinia);
-        const appControllerStore = useAppControllerStore(pinia);
-        const typingContentStore =  useTypingContentStore(pinia);
-        
-        typingContentStore.loadDemoContent.mockResolvedValue('some value');
-        appStateStore.typingProgressEnabled = false;
+    const blurSpy = mockActiveElementBlur();
 
-        const wrapper = shallowMount(ControlPanel, {
-            global: {
-                plugins: [ pinia ],
-              },
-        });
+    await getBtn(wrapper, btnIndex).trigger('click');
+    await Promise.resolve();
 
-        const spy__blur = (document.activeElement.blur = vi.fn());
-        await wrapper.findAll('q-btn').at(btnNumber).trigger('click');
-        expect(spy__blur).toHaveBeenCalledTimes(1);
-        expect(typingContentStore.loadDemoContent).toHaveBeenCalledTimes(1);
-        expect(typingContentStore.loadDemoContent).toHaveBeenCalledWith(filename);
-        expect(appControllerStore.resetProgress).toHaveBeenCalledTimes(1);
-        expect(appControllerStore.resetProgress).toHaveBeenCalledWith();
-        expect(appStateStore.typingProgressEnabled).toBe(true);
-        spy__blur.mockRestore();
-    };
+    expect(blurSpy).toHaveBeenCalledTimes(1);
+    expect(typingContentStore.loadDemoContent).toHaveBeenCalledWith(filename);
+    expect(appControllerStore.resetProgress).toHaveBeenCalledTimes(1);
+    expect(appStateStore.typingProgressEnabled).toBe(true);
+  }
 
-    async function loadDemoNotSuccess(btnNumber) {
-        const pinia = createTestingPinia();
-        const appStateStore =  useAppStateStore(pinia);
-        const typingContentStore =  useTypingContentStore(pinia);
-        
-        typingContentStore.loadDemoContent.mockRejectedValue('some value');
-        appStateStore.typingProgressEnabled = true;
+  async function loadDemoFailure(btnIndex) {
+    const pinia = createTestingPinia({ stubActions: false });
 
-        const wrapper = shallowMount(ControlPanel, {
-            global: {
-                plugins: [ pinia ],
-              },
-        });
+    const appStateStore = useAppStateStore(pinia);
+    const typingContentStore = useTypingContentStore(pinia);
 
-        await wrapper.findAll('q-btn').at(btnNumber).trigger('click');
-        await new Promise((res) => setTimeout(res, 100));
-        expect(useQuasar().notify).toBeCalledTimes(1);
-        expect(useQuasar().notify).toHaveBeenCalledWith({
-            progress: true,
-            message: "no valid text file!",
-            color: 'negative',
-            position: 'top'
-        });
-        expect(appStateStore.typingProgressEnabled).toBe(false);
+    typingContentStore.loadDemoContent.mockRejectedValue('NOPE');
+    appStateStore.typingProgressEnabled = true;
 
-        useQuasar().notify.mockReset();
-    }
-
-    test("whether button click action 'load Demo 1' and load demo content is success", () => {
-        loadDemoSuccess(2, 'demotext1.txt');
+    const wrapper = shallowMount(ControlPanel, {
+      global: {
+        plugins: [pinia],
+        stubs: {
+          'g-custom-button': {
+            template: '<button class="g-custom-button"><slot /></button>'
+          }
+        }
+      }
     });
 
-    test("whether button click action 'load Demo 1' and load demo content is not success", () => {
-        loadDemoNotSuccess(2);
+    await getBtn(wrapper, btnIndex).trigger('click');
+    await Promise.resolve();
+
+    const q = useQuasar();
+    expect(q.notify).toHaveBeenCalledWith({
+      progress: true,
+      message: 'no valid text file!',
+      color: 'negative',
+      position: 'top'
     });
 
-    test("whether button click action 'load Demo 2' and load demo content is success", () => {
-        loadDemoSuccess(3, 'demotext2.txt');
-    });
+    expect(appStateStore.typingProgressEnabled).toBe(false);
+  }
 
-    test("whether button click action 'load Demo 2' and load demo content is not success", () => {
-        loadDemoNotSuccess(3);
-    });
+  // -------------------------------------------------------------
+  // Load Demo tests (button order: 0 reset, 1 clear, 2 demo1, 3 demo2)
+  // -------------------------------------------------------------
+  test('\'Load Demo 1\' success', async () => {
+    await loadDemoSuccess(2, 'demotext1.txt');
+  });
+
+  test('\'Load Demo 1\' failure', async () => {
+    await loadDemoFailure(2);
+  });
+
+  test('\'Load Demo 2\' success', async () => {
+    await loadDemoSuccess(3, 'demotext2.txt');
+  });
+
+  test('\'Load Demo 2\' failure', async () => {
+    await loadDemoFailure(3);
+  });
+
 });
