@@ -1,7 +1,17 @@
 {
-    "editor.codeActionsOnSave": {
-        "source.fixAll": "explicit"
-    },
+    "editor.formatOnSave": false,
+	  "editor.codeActionsOnSave": {
+		"source.fixAll.eslint": "explicit"
+	  },
+	  "eslint.useFlatConfig": true,
+	  "eslint.validate": [
+		"javascript",
+		"typescript",
+		"vue",
+		"html",
+		"json"
+	  ],
+
     "todohighlight.keywords": [
         "DEBUG:",
         "REVIEW:",

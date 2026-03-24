@@ -18,16 +18,16 @@ import App from './App.vue';
 const store = createPinia();
 const app = createApp(App);
 
-app.component("GCustomButton", CustomButton);
+app.component('GCustomButton', CustomButton);
 
 app.use(store);
 app.use(router);
 app.use(Quasar, {
-    plugins: {
-        Notify,
-        Dialog
-    },
-    lang: lang
+  plugins: {
+    Notify,
+    Dialog
+  },
+  lang: lang
 });
 
 app.mount('#app');

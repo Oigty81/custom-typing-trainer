@@ -1,7 +1,7 @@
-import {createRouter, createWebHashHistory, createWebHistory} from "vue-router";
+import {createRouter, createWebHashHistory, createWebHistory} from 'vue-router';
 
 import MainView from '@/layouts/MainView.vue';
-import TrainingPage from "@/pages/TrainingPage.vue";
+import TrainingPage from '@/pages/TrainingPage.vue';
 
 let historyMode = undefined;
 
@@ -12,29 +12,29 @@ if(import.meta.env.VITE_LOCAL_HISTORY_MODE === 'true') {
 }
 
 const router = createRouter({
-    history: historyMode,
-    routes: [
+  history: historyMode,
+  routes: [
+    {
+      path: '/',
+      name: 'root',
+      component: MainView,
+      children: [
         {
-            path: "/",
-            name: "root",
-            component: MainView,
-            children: [
-              {
-                  path: "",
-                  redirect: "/home/",
-              },
-              {
-                  path: "home",
-                  name: "Training",
-                  component: TrainingPage
-              },
-          ],
+          path: '',
+          redirect: '/home/',
         },
         {
-            path: '/:pathMatch(.*)*',
-            redirect: "/"
-        }
-    ]
+          path: 'home',
+          name: 'Training',
+          component: TrainingPage
+        },
+      ],
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      redirect: '/'
+    }
+  ]
 });
 
 export default router;

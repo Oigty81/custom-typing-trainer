@@ -5,7 +5,7 @@ const uiStore = useUiStore();
 
 uiStore.heightViewport = window.innerHeight;
 
-addEventListener("resize", () => {
+addEventListener('resize', () => {
   uiStore.heightViewport = window.innerHeight;
 });
 </script>

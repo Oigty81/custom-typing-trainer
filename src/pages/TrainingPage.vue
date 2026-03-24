@@ -8,9 +8,9 @@ import { useQuasar } from 'quasar';
 import { useAppStateStore  } from '@/stores/appState';
 import { useAppControllerStore  } from '@/stores/appController';
 
-import ControlPanel from '@components/ControlPanel.vue';
-import StatePanel from '@components/StatePanel.vue';
-import TypingProgressField from '@components/TypingProgressField.vue';
+import ControlPanel from '@/components/ControlPanel.vue';
+import StatePanel from '@/components/StatePanel.vue';
+import TypingProgressField from '@/components/TypingProgressField.vue';
 
 const $q = useQuasar();
 
@@ -33,17 +33,17 @@ watch(appStateStoreRefs.isTypingFinished, (newValue, oldValue) => {
     `;
 
     $q.dialog({
-        title: '<span class="text-h4">Typing finished!</span>',
-        message: dialogMessage,
-        html: true,
-        persistent: true,
-        ok: {
-          push: true,
-          color: 'secondary'
-        },
-      }).onDismiss(() => {
-        appControllerStore.resetProgress();
-      });
+      title: '<span class="text-h4">Typing finished!</span>',
+      message: dialogMessage,
+      html: true,
+      persistent: true,
+      ok: {
+        push: true,
+        color: 'secondary'
+      },
+    }).onDismiss(() => {
+      appControllerStore.resetProgress();
+    });
   }
   
 });

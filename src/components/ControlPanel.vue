@@ -31,24 +31,24 @@ const loadDemoFile = (filename) => {
   fileToUpload.value = null;
   appStateStore.typingProgressEnabled = false;
   typingContentStore.loadDemoContent(filename)
-  .then(() => {
-    resetProgress();
-    appStateStore.typingProgressEnabled = true;
-  })
-  .catch((err) => {
-    $q.notify({
-      progress: true,
-      message: "no valid text file!",
-      color: 'negative',
-      position: 'top'
+    .then(() => {
+      resetProgress();
+      appStateStore.typingProgressEnabled = true;
+    })
+    .catch((err) => {
+      $q.notify({
+        progress: true,
+        message: 'no valid text file!',
+        color: 'negative',
+        position: 'top'
+      });
+      console.log('was error: ', err.error);
     });
-    console.log('was error: ', err.error);
-  });
 };
 
 watch(fileToUpload, () => {
-    if(fileToUpload.value != null) {
-      typingContentStore.loadContentFromCustomFile(fileToUpload.value)
+  if(fileToUpload.value != null) {
+    typingContentStore.loadContentFromCustomFile(fileToUpload.value)
       .then(() => {
         resetProgress();
         appStateStore.typingProgressEnabled = true;
@@ -57,16 +57,16 @@ watch(fileToUpload, () => {
         appStateStore.typingProgressEnabled = true;
         fileToUpload.value = null;
         $q.notify({
-              progress: true,
-              message: "no valid text file!",
-              color: 'negative',
-              position: 'top'
-            });
+          progress: true,
+          message: 'no valid text file!',
+          color: 'negative',
+          position: 'top'
+        });
       });
-    } else {
-      clearContent();
-    }
-  }, {deep: false, immediate: false }
+  } else {
+    clearContent();
+  }
+}, {deep: false, immediate: false }
 );
 
 

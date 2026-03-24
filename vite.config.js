@@ -1,10 +1,8 @@
+import { fileURLToPath } from 'url';
 import { defineConfig, loadEnv } from 'vite';
 
-import eslintPlugin from "vite-plugin-eslint";
-
 import vue from '@vitejs/plugin-vue';
-
-import { ViteAliases } from 'vite-aliases';
+import path from 'path';
 
 import { quasar, transformAssetUrls } from '@quasar/vite-plugin';
 
@@ -21,14 +19,16 @@ export default ({ mode }) => {
         template: { transformAssetUrls }
       }),
       quasar({
-        sassVariables: 'src/styles/quasar/quasar.variables.scss'
-      }),
-      eslintPlugin(),
-      ViteAliases({
-        dir: 'src',
-        prefix: '@',
+        sassVariables: fileURLToPath(
+          new URL('./src/styles/quasar/quasar.variables.scss', import.meta.url)
+        )
       }),
     ],
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, './src'),
+      },
+    },
   });
 
 };

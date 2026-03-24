@@ -11,15 +11,15 @@ const typingContentStore =  useTypingContentStore();
 
 const props = defineProps({
   typingFinished: { type: Boolean, required: true, default: () => {
-            return false;
-        }
-    },
+    return false;
+  }
+  },
 });
 
 const typingContainerElement = ref(null);
 
 onMounted(() => {
-  typingContainerElement.value = document.getElementById("typing-container");;
+  typingContainerElement.value = document.getElementById('typing-container');;
 });
 
 onUpdated(() => {
@@ -29,16 +29,16 @@ onUpdated(() => {
 watch(appControllerStore, () => {
   if(appControllerStore.currentPositionBlock === 0) {
     typingContainerElement.value.scrollTo({
-          top: 0,
-          left: 0,
-          behavior: "smooth",
-        });
+      top: 0,
+      left: 0,
+      behavior: 'smooth',
+    });
   }
 });
 
 const scrollToCurrentTypingPosition = () => {
   let tc = typingContainerElement.value;
-  let charCurrent = document.getElementsByClassName("char-current")[0];
+  let charCurrent = document.getElementsByClassName('char-current')[0];
 
   const charLineDistanceFromBorder = 35;
 
@@ -51,10 +51,10 @@ const scrollToCurrentTypingPosition = () => {
       let computedScrollToBottom = rectCharCurrent.top + tc.scrollTop + charLineDistanceFromBorder - containerBottom;
       
       tc.scrollTo({
-          top: computedScrollToBottom,
-          left: 0,
-          behavior: "smooth",
-        });
+        top: computedScrollToBottom,
+        left: 0,
+        behavior: 'smooth',
+      });
     }
   }
 };
